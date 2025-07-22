@@ -1,98 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>CleanTech - Waste Classification</title>
-  <style>
-    /* Styles same as before for layout and nav */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #f0f8ff; }
-    nav {
-      background-color: #004466;
-      height: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 40px;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      color: white;
-    }
-    .logo { font-size: 20px; font-weight: bold; }
-    .nav-links { display: flex; gap: 30px; }
-    .nav-links a {
-      color: white; text-decoration: none; font-weight: bold; padding: 10px;
-    }
-    .nav-links a:hover { background-color: #0077cc; border-radius: 5px; }
-    .hero {
-      height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      align-items: center; padding: 80px 20px 0; text-align: center;
-    }
-    .hero h1 { font-size: 36px; color: #004466; margin-bottom: 20px; }
-    .hero p { font-size: 18px; color: #333; max-width: 600px; margin-bottom: 30px; }
-    .get-started {
-      padding: 12px 24px; background-color: #004466; color: white;
-      font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 5px;
-    }
-    .get-started:hover { background-color: #0077cc; }
-    .container {
-      padding: 60px 20px; max-width: 600px; margin: 0 auto; text-align: center;
-    }
-    input[type="file"], input[type="submit"] {
-      margin-top: 15px; padding: 10px; font-size: 16px;
-    }
-    input[type="submit"] {
-      background-color: #004466; color: white; border: none; border-radius: 5px;
-      cursor: pointer;
-    }
-    input[type="submit"]:hover { background-color: #0077cc; }
-    .result { margin-top: 30px; }
-    img.preview {
-      margin-top: 15px; width: 300px; border-radius: 10px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Waste Classifier</title>
 </head>
 <body>
+    <h1>Waste Classifier Result</h1>
 
-<nav>
-  <div class="logo">Waste Classification</div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="#predict">Predict</a>
-    <a href="/contact">Contact</a>
-  </div>
-</nav>
+    {% if prediction %}
+        <p><strong>Prediction:</strong> {{ prediction }}</p>
+        {% if img_path %}
+            <img src="{{ img_path }}" alt="Uploaded Image" width="300" />
+        {% endif %}
+    {% endif %}
 
-<div class="hero">
-  <h1>Welcome to Municipal Waste Classification</h1>
-  <p>
-    CleanTech is a smart solution for transforming waste management with transfer learning.
-    Upload an image of waste, and our AI will classify it as plastic or paper — helping promote cleaner cities and better recycling.
-  </p>
-  <a href="#predict" class="get-started">Get Started</a>
-</div>
-
-<div class="container" id="predict">
-  {% if prediction %}
-    <!-- After prediction, show this heading -->
-    <h2>Cleanliness Detection</h2>
-    <h3 style="color: green;">Result: {{ prediction | capitalize }}</h3>
-    <img class="preview" src="{{ url_for('static', filename='uploads/' + img_path) }}" alt="Uploaded Image">
-  {% else %}
-    <!-- Before prediction, show this heading -->
-    <h2>Image Classification</h2>
-  {% endif %}
-
-  <form action="/predict" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="image/*" required><br>
-    <input type="submit" value="Predict">
-  </form>
-</div>
-
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <button type="submit">Upload and Predict</button>
+    </form>
 </body>
 </html>
-
